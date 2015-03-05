@@ -1,0 +1,30 @@
+owrt:  
+  build: dfiles/volume
+  volumes:
+    - openwrt:/openwrt
+  privileged: true
+
+git:  
+  build: dfiles/setup
+  volumes_from:
+    - owrt
+  # entrypoint: git clone git://git.openwrt.org/openwrt.git
+  entrypoint: git
+  privileged: true
+
+make:  
+  build: dfiles/make
+  volumes_from:
+    - owrt
+  entrypoint: make
+  privileged: true
+
+compile:  
+  build: dfiles/make
+  volumes_from:
+    - owrt
+  volumes:
+    - code:/code
+  # entrypoint: /openwrt/staging_dir/toolchain-mipsel_24kec+dsp_gcc-4.8-linaro_uClibc-0.9.33.2/bin/mipsel-openwrt-linux-gcc
+  # entrypoint: dfiles/make/start.sh
+  privileged: true
